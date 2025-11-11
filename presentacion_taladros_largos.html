@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método de Explotación: Taladros Largos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            overflow: hidden;
+            color: #333;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            background: white;
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px;
+            display: none;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-header {
+            border-bottom: 4px solid #2a5298;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .slide-title {
+            font-size: 2.5em;
+            color: #1e3c72;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.2em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .slide-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .content-section {
+            margin-bottom: 25px;
+        }
+
+        .content-section h3 {
+            color: #2a5298;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            border-left: 5px solid #ff6b6b;
+            padding-left: 15px;
+        }
+
+        .content-section p {
+            line-height: 1.8;
+            font-size: 1.1em;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .content-section ul, .content-section ol {
+            margin-left: 30px;
+            line-height: 2;
+            font-size: 1.05em;
+        }
+
+        .content-section li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight-box h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 5px solid #2a5298;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ff6b6b;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .column {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .column h4 {
+            color: #2a5298;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .diagram-title {
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #2a5298;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: #2a5298;
+            color: white;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            color: #2a5298;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .cover-slide {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .cover-slide .slide-title {
+            color: white;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cover-slide .slide-subtitle {
+            color: #e0e0e0;
+            font-size: 1.5em;
+        }
+
+        .cover-slide .course-info {
+            margin-top: 40px;
+            font-size: 1.2em;
+            color: #b0c4de;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        table th {
+            background: #2a5298;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .key-point {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .key-point strong {
+            color: #e65100;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                width: 95%;
+            }
+
+            .slide-title {
+                font-size: 1.8em;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Portada -->
+        <div class="slide active cover-slide">
+            <div class="slide-title">MÉTODO DE EXPLOTACIÓN SUBTERRÁNEA</div>
+            <div class="slide-subtitle">TALADROS LARGOS</div>
+            <div class="slide-subtitle" style="margin-top: 20px; font-size: 1.8em; font-weight: bold;">Long Hole Mining</div>
+            <div class="course-info">
+                <p>Métodos de Explotación Subterránea</p>
+                <p style="margin-top: 10px;">Ingeniería de Minas</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Índice -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Contenido del Curso</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <ol style="font-size: 1.2em; line-height: 2.5;">
+                        <li><strong>Definición y Conceptos Fundamentales</strong></li>
+                        <li><strong>Clasificación de Métodos de Taladros Largos</strong></li>
+                        <li><strong>Diseño y Parámetros Técnicos</strong></li>
+                        <li><strong>Perforación: Equipos y Técnicas</strong></li>
+                        <li><strong>Voladura y Secuencias de Disparo</strong></li>
+                        <li><strong>Ventajas y Desventajas del Método</strong></li>
+                        <li><strong>Aplicaciones y Casos de Uso</strong></li>
+                        <li><strong>Seguridad y Consideraciones Operacionales</strong></li>
+                        <li><strong>Aspectos Económicos</strong></li>
+                        <li><strong>Conclusiones y Tendencias Futuras</strong></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Definición -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">¿Qué son los Taladros Largos?</div>
+                <div class="slide-subtitle">Definición y Conceptos Fundamentales</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <p><strong>Los taladros largos (Long Hole Mining)</strong> son un método de explotación subterránea que utiliza perforaciones de gran longitud (generalmente entre 15 y 50 metros) para fragmentar el mineral mediante voladura.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>📌 Características Principales</h4>
+                    <ul>
+                        <li>Perforaciones de 15 a 50 metros de longitud</li>
+                        <li>Diámetros de perforación: 64 mm a 165 mm</li>
+                        <li>Alta productividad y mecanización</li>
+                        <li>Mínima presencia de personal en zonas de riesgo</li>
+                        <li>Aplicable en yacimientos masivos o tabulares</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Principio Operativo:</strong> El método consiste en crear una abertura inicial (slot o cara libre), desde la cual se perforan taladros paralelos que se cargan con explosivos y se detonan en secuencia para fragmentar grandes volúmenes de mineral.</p>
+                </div>
+
+                <div class="key-point">
+                    <strong>Nota Importante:</strong> Este método se diferencia de los taladros cortos (short holes) que tienen longitudes menores a 5 metros y se utilizan en métodos como Room and Pillar o Cut and Fill.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Clasificación -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Clasificación de Métodos</div>
+                <div class="slide-subtitle">Tipos de Taladros Largos</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <h3>1. Longhole Open Stoping (LOS)</h3>
+                    <p>Método más común donde los taladros se perforan en abanico desde subniveles hacia arriba o hacia abajo, creando caserones abiertos.</p>
+                    <ul>
+                        <li><strong>Longhole Stoping Ascendente:</strong> Perforación desde nivel inferior hacia superior</li>
+                        <li><strong>Longhole Stoping Descendente:</strong> Perforación desde nivel superior hacia inferior</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>2. Sublevel Stoping (SLS)</h3>
+                    <p>Variante donde se crean subniveles intermedios para perforar taladros largos en forma de abanico, permitiendo explotar cuerpos mineralizados de mayor altura.</p>
+                    <ul>
+                        <li>Subniveles espaciados cada 15-30 metros</li>
+                        <li>Taladros en abanico con ángulos variables</li>
+                        <li>Mayor flexibilidad en cuerpos irregulares</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>3. Vertical Crater Retreat (VCR)</h3>
+                    <p>Método especializado que utiliza cargas esféricas de explosivo en el fondo de taladros verticales para crear cráteres invertidos.</p>
+                    <ul>
+                        <li>Taladros verticales paralelos</li>
+                        <li>Cargas concentradas en el fondo</li>
+                        <li>Fragmentación por efecto cráter</li>
+                        <li>Retroceso progresivo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Diseño y Parámetros -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Diseño y Parámetros Técnicos</div>
+                <div class="slide-subtitle">Dimensiones y Configuración</div>
+            </div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div class="column">
+                        <h4>Parámetros de Perforación</h4>
+                        <ul>
+                            <li><strong>Longitud:</strong> 15-50 m</li>
+                            <li><strong>Diámetro:</strong> 64-165 mm</li>
+                            <li><strong>Burden:</strong> 2.5-4.0 m</li>
+                            <li><strong>Espaciamiento:</strong> 3.0-5.0 m</li>
+                            <li><strong>Desviación máxima:</strong> 2-3%</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Dimensiones del Caserón</h4>
+                        <ul>
+                            <li><strong>Altura:</strong> 30-100 m</li>
+                            <li><strong>Ancho:</strong> 15-30 m</li>
+                            <li><strong>Longitud:</strong> 30-60 m</li>
+                            <li><strong>Pilares:</strong> 5-15 m</li>
+                            <li><strong>Volumen:</strong> 10,000-100,000 ton</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Factores de Diseño Críticos</h3>
+                    <table>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Consideración</th>
+                            <th>Impacto</th>
+                        </tr>
+                        <tr>
+                            <td>Estabilidad de roca</td>
+                            <td>RMR > 50, GSI > 45</td>
+                            <td>Dimensiones del caserón</td>
+                        </tr>
+                        <tr>
+                            <td>Geometría del yacimiento</td>
+                            <td>Potencia > 10 m, buzamiento > 50°</td>
+                            <td>Método de perforación</td>
+                        </tr>
+                        <tr>
+                            <td>Dilución</td>
+                            <td>Control de sobre-excavación</td>
+                            <td>Ley del mineral</td>
+                        </tr>
+                        <tr>
+                            <td>Recuperación</td>
+                            <td>Diseño de pilares</td>
+                            <td>Economía del proyecto</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Número de Estabilidad (N'):</strong> Se utiliza para determinar las dimensiones máximas del caserón. N' = Q × A × B × C, donde Q es el índice de calidad de roca, A es el factor de esfuerzo, B es el factor de orientación y C es el factor de gravedad.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Perforación -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Perforación</div>
+                <div class="slide-subtitle">Equipos, Técnicas y Procedimientos</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <h3>Equipos de Perforación</h3>
+                    <div class="two-column">
+                        <div class="column">
+                            <h4>Jumbos Electrohidráulicos</h4>
+                            <ul>
+                                <li>Simba (Atlas Copco)</li>
+                                <li>Boomer (Sandvik)</li>
+                                <li>Cabezal: Top Hammer o DTH</li>
+                                <li>1-3 brazos de perforación</li>
+                                <li>Control computarizado</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Características Técnicas</h4>
+                            <ul>
+                                <li>Velocidad: 1-3 m/min</li>
+                                <li>Precisión: ±0.5 m en 40 m</li>
+                                <li>Automatización GPS/láser</li>
+                                <li>Sistemas anti-atascamiento</li>
+                                <li>Monitoreo en tiempo real</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Patrones de Perforación</h3>
+                    <ul>
+                        <li><strong>Paralelos:</strong> Taladros verticales o inclinados paralelos entre sí</li>
+                        <li><strong>Abanico (Fan drilling):</strong> Taladros divergentes desde un punto común</li>
+                        <li><strong>Anillos (Ring drilling):</strong> Taladros en secciones transversales</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>🔧 Proceso de Perforación</h4>
+                    <ol>
+                        <li><strong>Topografía y marcado:</strong> Ubicación precisa de collares</li>
+                        <li><strong>Perforación piloto:</strong> Verificación de dirección</li>
+                        <li><strong>Perforación de producción:</strong> Ejecución del patrón completo</li>
+                        <li><strong>Medición y verificación:</strong> Control de desviación con sondas</li>
+                        <li><strong>Limpieza:</strong> Soplado de taladros</li>
+                    </ol>
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>⚠️ Control de Desviación:</strong> La desviación de taladros es crítica. Una desviación del 3% en un taladro de 40 m resulta en 1.2 m de error, afectando el burden y espaciamiento, lo que puede causar problemas de fragmentación y dilución.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Voladura -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Voladura y Secuencias</div>
+                <div class="slide-subtitle">Carga de Explosivos y Detonación</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <h3>Tipos de Explosivos</h3>
+                    <div class="two-column">
+                        <div class="column">
+                            <h4>ANFO (Ammonium Nitrate Fuel Oil)</h4>
+                            <ul>
+                                <li>Más económico</li>
+                                <li>Densidad: 0.8-0.9 g/cm³</li>
+                                <li>VOD: 3,200 m/s</li>
+                                <li>Taladros secos</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Emulsiones</h4>
+                            <ul>
+                                <li>Resistente al agua</li>
+                                <li>Densidad: 1.1-1.3 g/cm³</li>
+                                <li>VOD: 4,500-5,500 m/s</li>
+                                <li>Mayor energía</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Diseño de Carga</h3>
+                    <table>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Descripción</th>
+                            <th>Longitud Típica</th>
+                        </tr>
+                        <tr>
+                            <td>Carga de fondo</td>
+                            <td>Explosivo de alta densidad</td>
+                            <td>2-4 m</td>
+                        </tr>
+                        <tr>
+                            <td>Carga de columna</td>
+                            <td>ANFO o emulsión</td>
+                            <td>60-80% del taladro</td>
+                        </tr>
+                        <tr>
+                            <td>Taco</td>
+                            <td>Material inerte (grava, detritus)</td>
+                            <td>2-3 m</td>
+                        </tr>
+                        <tr>
+                            <td>Iniciador</td>
+                            <td>Detonador electrónico o no eléctrico</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="content-section">
+                    <h3>Secuencias de Voladura</h3>
+                    <p><strong>Objetivo:</strong> Crear una secuencia de detonación que permita la expansión progresiva del material hacia la cara libre, minimizando la compactación y optimizando la fragmentación.</p>
+                    <ul>
+                        <li><strong>Slot inicial:</strong> Primera voladura para crear cara libre (3-5 taladros)</li>
+                        <li><strong>Filas sucesivas:</strong> Detonación en secuencia con retardos de 25-100 ms</li>
+                        <li><strong>Retardos entre taladros:</strong> 25-50 ms para permitir movimiento</li>
+                        <li><strong>Retardos entre filas:</strong> 100-200 ms para expansión completa</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>⚡ Factor de Carga</h4>
+                    <p><strong>FC = Peso explosivo (kg) / Toneladas de roca</strong></p>
+                    <p>Típicamente: 0.3 - 0.8 kg/ton dependiendo de la dureza de la roca y fragmentación deseada</p>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Detonadores Electrónicos:</strong> Permiten precisión de ±1 ms en los tiempos de retardo, mejorando significativamente la fragmentación, reduciendo vibraciones y optimizando el consumo de explosivos.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Ventajas y Desventajas -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Análisis Comparativo</div>
+                <div class="slide-subtitle">Ventajas y Desventajas del Método</div>
+            </div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div class="column" style="background: #e8f5e9;">
+                        <h4 style="color: #2e7d32;">✅ VENTAJAS</h4>
+                        <ul>
+                            <li><strong>Alta productividad:</strong> 10-30 ton/hombre-turno</li>
+                            <li><strong>Mecanización completa:</strong> Reducción de costos operativos</li>
+                            <li><strong>Seguridad:</strong> Mínima exposición del personal</li>
+                            <li><strong>Flexibilidad:</strong> Adaptable a diferentes geometrías</li>
+                            <li><strong>Bajo costo:</strong> 15-30 USD/ton</li>
+                            <li><strong>Grandes volúmenes:</strong> Explotación masiva eficiente</li>
+                            <li><strong>Dilución controlada:</strong> 10-20% típicamente</li>
+                            <li><strong>Recuperación alta:</strong> 75-90%</li>
+                        </ul>
+                    </div>
+                    <div class="column" style="background: #ffebee;">
+                        <h4 style="color: #c62828;">❌ DESVENTAJAS</h4>
+                        <ul>
+                            <li><strong>Inversión inicial alta:</strong> Equipos costosos</li>
+                            <li><strong>Requiere roca competente:</strong> RMR > 50</li>
+                            <li><strong>Desarrollo extenso:</strong> Múltiples niveles necesarios</li>
+                            <li><strong>Dilución inevitable:</strong> Contactos irregulares</li>
+                            <li><strong>Pérdida de pilares:</strong> Mineral no recuperable</li>
+                            <li><strong>Vibraciones:</strong> Voladuras masivas</li>
+                            <li><strong>Ventilación compleja:</strong> Grandes espacios abiertos</li>
+                            <li><strong>Control de desviación:</strong> Requiere tecnología avanzada</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Comparación con Otros Métodos</h3>
+                    <table>
+                        <tr>
+                            <th>Aspecto</th>
+                            <th>Taladros Largos</th>
+                            <th>Cut & Fill</th>
+                            <th>Block Caving</th>
+                        </tr>
+                        <tr>
+                            <td>Productividad</td>
+                            <td>Alta (10-30 t/h-t)</td>
+                            <td>Baja (3-8 t/h-t)</td>
+                            <td>Muy Alta (30-60 t/h-t)</td>
+                        </tr>
+                        <tr>
+                            <td>Costo (USD/ton)</td>
+                            <td>15-30</td>
+                            <td>40-80</td>
+                            <td>8-15</td>
+                        </tr>
+                        <tr>
+                            <td>Dilución</td>
+                            <td>10-20%</td>
+                            <td>5-15%</td>
+                            <td>15-30%</td>
+                        </tr>
+                        <tr>
+                            <td>Recuperación</td>
+                            <td>75-90%</td>
+                            <td>85-95%</td>
+                            <td>85-95%</td>
+                        </tr>
+                        <tr>
+                            <td>Flexibilidad</td>
+                            <td>Alta</td>
+                            <td>Muy Alta</td>
+                            <td>Baja</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Aplicaciones -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Aplicaciones y Casos de Uso</div>
+                <div class="slide-subtitle">¿Cuándo usar Taladros Largos?</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <h3>Condiciones Ideales para Aplicación</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>Geometría del yacimiento:</strong> Cuerpos masivos o tabulares con potencia > 10 m</li>
+                            <li><strong>Buzamiento:</strong> Preferiblemente > 50° (permite gravedad para extracción)</li>
+                            <li><strong>Calidad de roca:</strong> RMR > 50, GSI > 45 (roca competente)</li>
+                            <li><strong>Profundidad:</strong> Cualquier profundidad (método versátil)</li>
+                            <li><strong>Ley del mineral:</strong> Media a alta (justifica desarrollo)</li>
+                            <li><strong>Regularidad:</strong> Contactos relativamente regulares</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Tipos de Yacimientos</h3>
+                    <div class="two-column">
+                        <div class="column">
+                            <h4>Yacimientos Metálicos</h4>
+                            <ul>
+                                <li>Cobre (pórfidos, vetas)</li>
+                                <li>Zinc y Plomo (VMS)</li>
+                                <li>Oro (vetas, stockwork)</li>
+                                <li>Níquel (sulfuros masivos)</li>
+                                <li>Hierro (magnetita)</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Minerales Industriales</h4>
+                            <ul>
+                                <li>Fosfatos</li>
+                                <li>Potasa</li>
+                                <li>Sal gema</li>
+                                <li>Talco</li>
+                                <li>Barita</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Ejemplos de Minas Destacadas</h3>
+                    <table>
+                        <tr>
+                            <th>Mina</th>
+                            <th>País</th>
+                            <th>Mineral</th>
+                            <th>Método Específico</th>
+                        </tr>
+                        <tr>
+                            <td>Kidd Creek</td>
+                            <td>Canadá</td>
+                            <td>Cu, Zn, Ag</td>
+                            <td>Longhole Stoping</td>
+                        </tr>
+                        <tr>
+                            <td>Olympic Dam</td>
+                            <td>Australia</td>
+                            <td>Cu, U, Au, Ag</td>
+                            <td>Sublevel Stoping</td>
+                        </tr>
+                        <tr>
+                            <td>Kiirunavaara</td>
+                            <td>Suecia</td>
+                            <td>Fe</td>
+                            <td>Sublevel Caving/Stoping</td>
+                        </tr>
+                        <tr>
+                            <td>Mount Isa</td>
+                            <td>Australia</td>
+                            <td>Pb, Zn, Ag</td>
+                            <td>Longhole Open Stoping</td>
+                        </tr>
+                        <tr>
+                            <td>Cerro Lindo</td>
+                            <td>Perú</td>
+                            <td>Zn, Pb, Cu, Ag</td>
+                            <td>Longhole Stoping</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>📊 Estadísticas Globales</h4>
+                    <p>Los métodos de taladros largos representan aproximadamente el <strong>30-35%</strong> de la producción minera subterránea mundial, siendo el segundo método más utilizado después del Block Caving.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Seguridad -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Seguridad y Consideraciones</div>
+                <div class="slide-subtitle">Aspectos Críticos de Seguridad Operacional</div>
+            </div>
+            <div class="slide-content">
+                <div class="warning-box">
+                    <h4>⚠️ RIESGOS PRINCIPALES</h4>
+                    <ul>
+                        <li><strong>Caída de rocas:</strong> Desprendimientos desde el techo o paredes del caserón</li>
+                        <li><strong>Voladuras:</strong> Proyección de rocas, gases tóxicos, vibraciones</li>
+                        <li><strong>Equipos móviles:</strong> Colisiones, atrapamientos</li>
+                        <li><strong>Espacios confinados:</strong> Falta de oxígeno, gases nocivos</li>
+                        <li><strong>Inestabilidad de caserones:</strong> Colapsos masivos</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>Medidas de Control</h3>
+                    <div class="two-column">
+                        <div class="column">
+                            <h4>Controles de Ingeniería</h4>
+                            <ul>
+                                <li>Diseño geomecánico riguroso</li>
+                                <li>Monitoreo de estabilidad (sismicidad)</li>
+                                <li>Sistemas de fortificación</li>
+                                <li>Ventilación forzada</li>
+                                <li>Iluminación adecuada</li>
+                                <li>Sistemas de comunicación</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Controles Administrativos</h4>
+                            <ul>
+                                <li>Procedimientos escritos de trabajo</li>
+                                <li>Capacitación continua</li>
+                                <li>Inspecciones pre-operacionales</li>
+                                <li>Permisos de trabajo</li>
+                                <li>Restricción de acceso</li>
+                                <li>Planes de emergencia</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Equipos de Protección Personal (EPP)</h3>
+                    <ul>
+                        <li>Casco con lámpara</li>
+                        <li>Lentes de seguridad</li>
+                        <li>Protección auditiva</li>
+                        <li>Respirador (cuando sea necesario)</li>
+                        <li>Guantes de trabajo</li>
+                        <li>Botas de seguridad con puntera de acero</li>
+                        <li>Ropa reflectante</li>
+                        <li>Autorrescatador (en minas con riesgo de gases)</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>🔍 Monitoreo Geotécnico</h4>
+                    <p>Es fundamental implementar sistemas de monitoreo continuo:</p>
+                    <ul>
+                        <li><strong>Microsísmica:</strong> Detección de fracturas y movimientos</li>
+                        <li><strong>Extensómetros:</strong> Medición de deformaciones</li>
+                        <li><strong>Escaneo láser:</strong> Control de dilución y sobre-excavación</li>
+                        <li><strong>Cámaras remotas:</strong> Inspección visual sin exposición</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Principio Fundamental:</strong> En taladros largos, la seguridad se basa en la <strong>separación física</strong> entre el personal y las zonas de riesgo. Las operaciones de perforación, carga y extracción se realizan desde áreas protegidas, minimizando la exposición.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Aspectos Económicos -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Aspectos Económicos</div>
+                <div class="slide-subtitle">Costos y Rentabilidad</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <h3>Estructura de Costos</h3>
+                    <table>
+                        <tr>
+                            <th>Componente</th>
+                            <th>% del Costo Total</th>
+                            <th>USD/ton (Típico)</th>
+                        </tr>
+                        <tr>
+                            <td>Desarrollo y preparación</td>
+                            <td>25-35%</td>
+                            <td>5-10</td>
+                        </tr>
+                        <tr>
+                            <td>Perforación</td>
+                            <td>15-20%</td>
+                            <td>3-6</td>
+                        </tr>
+                        <tr>
+                            <td>Voladura (explosivos)</td>
+                            <td>10-15%</td>
+                            <td>2-4</td>
+                        </tr>
+                        <tr>
+                            <td>Carguío y transporte</td>
+                            <td>20-25%</td>
+                            <td>4-7</td>
+                        </tr>
+                        <tr>
+                            <td>Servicios (ventilación, etc.)</td>
+                            <td>10-15%</td>
+                            <td>2-4</td>
+                        </tr>
+                        <tr>
+                            <td>Sostenimiento</td>
+                            <td>5-10%</td>
+                            <td>1-3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>100%</strong></td>
+                            <td><strong>15-30</strong></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="content-section">
+                    <h3>Factores que Afectan la Rentabilidad</h3>
+                    <div class="two-column">
+                        <div class="column">
+                            <h4>Factores Positivos</h4>
+                            <ul>
+                                <li>Alta ley del mineral</li>
+                                <li>Roca competente (menos sostenimiento)</li>
+                                <li>Geometría regular</li>
+                                <li>Escala de operación grande</li>
+                                <li>Mecanización eficiente</li>
+                                <li>Baja dilución</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Factores Negativos</h4>
+                            <ul>
+                                <li>Desarrollo extenso requerido</li>
+                                <li>Inversión inicial alta</li>
+                                <li>Roca débil (más sostenimiento)</li>
+                                <li>Geometría irregular</li>
+                                <li>Pérdida en pilares</li>
+                                <li>Alta dilución</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>💰 Indicadores Clave de Desempeño (KPIs)</h4>
+                    <ul>
+                        <li><strong>Productividad:</strong> 10-30 ton/hombre-turno</li>
+                        <li><strong>Costo operativo:</strong> 15-30 USD/ton</li>
+                        <li><strong>Dilución:</strong> 10-20%</li>
+                        <li><strong>Recuperación:</strong> 75-90%</li>
+                        <li><strong>Disponibilidad de equipos:</strong> > 85%</li>
+                        <li><strong>Utilización de equipos:</strong> > 70%</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Punto de Equilibrio:</strong> Para que el método de taladros largos sea económicamente viable, generalmente se requiere una ley de corte que permita cubrir los costos de desarrollo y operación. La escala mínima económica suele ser de 500-1,000 toneladas por día.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Conclusiones -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Conclusiones</div>
+                <div class="slide-subtitle">Resumen y Tendencias Futuras</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <h3>Puntos Clave</h3>
+                    <div class="key-point">
+                        <strong>1. Versatilidad:</strong> Los taladros largos son uno de los métodos más versátiles y ampliamente utilizados en minería subterránea, aplicables a diversos tipos de yacimientos y condiciones geológicas.
+                    </div>
+                    <div class="key-point">
+                        <strong>2. Productividad:</strong> Ofrecen un excelente balance entre productividad, costos y seguridad, con alta mecanización y mínima exposición del personal.
+                    </div>
+                    <div class="key-point">
+                        <strong>3. Tecnología:</strong> El éxito del método depende críticamente de la tecnología de perforación, control de desviación y diseño geomecánico riguroso.
+                    </div>
+                    <div class="key-point">
+                        <strong>4. Economía:</strong> Con costos de 15-30 USD/ton, es competitivo para yacimientos de ley media a alta con geometrías favorables.
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Tendencias Futuras</h3>
+                    <div class="highlight-box">
+                        <h4>🚀 Innovaciones Tecnológicas</h4>
+                        <ul>
+                            <li><strong>Automatización:</strong> Jumbos autónomos con navegación GPS y control remoto</li>
+                            <li><strong>Inteligencia Artificial:</strong> Optimización de patrones de voladura en tiempo real</li>
+                            <li><strong>Monitoreo 4.0:</strong> IoT y sensores para monitoreo continuo de estabilidad</li>
+                            <li><strong>Realidad Aumentada:</strong> Visualización 3D para planificación y control</li>
+                            <li><strong>Perforación direccional:</strong> Mayor precisión y control de desviación</li>
+                            <li><strong>Explosivos inteligentes:</strong> Detonadores programables con mayor precisión</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Desafíos Futuros</h3>
+                    <ul>
+                        <li>Minería a mayor profundidad (> 2,000 m) con altos esfuerzos</li>
+                        <li>Reducción de la huella ambiental y consumo energético</li>
+                        <li>Mejora continua en seguridad y salud ocupacional</li>
+                        <li>Optimización de la recuperación y reducción de dilución</li>
+                        <li>Integración con minería sostenible y economía circular</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Reflexión Final:</strong> El método de taladros largos continuará siendo fundamental en la minería subterránea del siglo XXI, evolucionando con la tecnología para ser más seguro, eficiente y sostenible.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Referencias -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Referencias y Recursos</div>
+                <div class="slide-subtitle">Material de Consulta</div>
+            </div>
+            <div class="slide-content">
+                <div class="content-section">
+                    <h3>Bibliografía Recomendada</h3>
+                    <ul style="line-height: 2;">
+                        <li>Hamrin, H. (2001). <em>Underground Mining Methods: Engineering Fundamentals and International Case Studies</em>. SME.</li>
+                        <li>Brady, B. H. G., & Brown, E. T. (2004). <em>Rock Mechanics for Underground Mining</em>. Springer.</li>
+                        <li>Hustrulid, W. A., & Bullock, R. C. (2001). <em>Underground Mining Methods: Engineering Fundamentals and International Case Studies</em>. SME.</li>
+                        <li>Villaescusa, E. (2014). <em>Geotechnical Design for Sublevel Open Stoping</em>. CRC Press.</li>
+                        <li>Atlas Copco. (2007). <em>Mining Methods in Underground Mining</em>. Atlas Copco Rock Drills AB.</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>Normas y Estándares</h3>
+                    <ul>
+                        <li>ISRM - International Society for Rock Mechanics</li>
+                        <li>SME - Society for Mining, Metallurgy & Exploration</li>
+                        <li>CIM - Canadian Institute of Mining</li>
+                        <li>AusIMM - Australasian Institute of Mining and Metallurgy</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h3>Software Especializado</h3>
+                    <div class="two-column">
+                        <div class="column">
+                            <h4>Diseño y Planificación</h4>
+                            <ul>
+                                <li>Deswik</li>
+                                <li>Datamine Studio</li>
+                                <li>Vulcan</li>
+                                <li>MineSight</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <h4>Geomecánica</h4>
+                            <ul>
+                                <li>FLAC3D</li>
+                                <li>Phase2</li>
+                                <li>Map3D</li>
+                                <li>Examine3D</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>📚 Recursos en Línea</h4>
+                    <ul>
+                        <li>OneMine.org - Biblioteca digital de minería</li>
+                        <li>Mining Engineering Journal</li>
+                        <li>International Journal of Rock Mechanics and Mining Sciences</li>
+                        <li>Tunnelling and Underground Space Technology</li>
+                    </ul>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+                    <h2 style="margin-bottom: 15px;">¡Gracias por su atención!</h2>
+                    <p style="font-size: 1.2em;">¿Preguntas?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">13</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-button" id="prev-btn" onclick="previousSlide()">← Anterior</button>
+        <button class="nav-button" id="next-btn" onclick="nextSlide()">Siguiente →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentSlideSpan = document.getElementById('current-slide');
+        const totalSlidesSpan = document.getElementById('total-slides');
+
+        totalSlidesSpan.textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            currentSlideSpan.textContent = currentSlide + 1;
+
+            // Update button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+
+            // Scroll to top of slide
+            slides[currentSlide].scrollTop = 0;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousSlide();
+            }
+        }
+    </script>
+</body>
+</html>
